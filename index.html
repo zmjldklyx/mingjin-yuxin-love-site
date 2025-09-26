@@ -5,53 +5,61 @@
   <title>张铭津 ❤️ 梁玉薪</title>
   <style>
     body {
-      font-family: 'Arial';
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       background: linear-gradient(to bottom right, #ffe4e1, #fff0f5);
+      font-family: 'Arial', sans-serif;
       text-align: center;
-      padding: 50px;
-    }
-    h1 {
       color: #d6336c;
-      font-size: 3em;
-      margin-bottom: 10px;
     }
+
+    h1 {
+      font-size: 3em;
+      margin-top: 40px;
+    }
+
     .love {
       font-size: 2em;
-      color: #ff69b4;
       margin: 20px 0;
     }
+
     section {
-      margin: 40px 0;
+      margin: 40px auto;
+      max-width: 600px;
     }
+
     ul {
       list-style: none;
       padding: 0;
       font-size: 1.2em;
     }
+
     li::before {
       content: "💖 ";
     }
- .heart {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-image: url('https://i.imgur.com/3ZQ3Z4F.png'); /* 爱心图标 */
-  background-size: cover;
-  animation: fall linear infinite;
-  z-index: 0;
-}
 
-@keyframes fall {
-  0% {
-    transform: translateY(-100px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh);
-    opacity: 0;
-  }
-}
-</style>
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-image: url('https://i.imgur.com/3ZQ3Z4F.png');
+      background-size: cover;
+      animation: fall linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
   <h1>张铭津 ❤️ 梁玉薪</h1>
@@ -78,26 +86,21 @@
   </section>
 
   <script>
-    <script>
-  function createHeart() {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.animationDuration = (3 + Math.random() * 5) + 's';
-    document.body.appendChild(heart);
-
-    setTimeout(() => {
-      heart.remove();
-    }, 8000);
-  }
-
-  setInterval(createHeart, 300);
-</script>
-
-    const startDate = new Date("2023-06-01"); // 你们在一起的日期
+    const startDate = new Date("2023-06-01");
     const today = new Date();
     const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
     document.getElementById("days").textContent = daysTogether;
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+
+    setInterval(createHeart, 300);
   </script>
 </body>
 </html>
