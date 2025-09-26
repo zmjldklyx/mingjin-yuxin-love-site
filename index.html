@@ -8,7 +8,7 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background : linear-gradient ( to bottom right , #ffdee9, #b5fffc ) ;
+      background: linear-gradient(to bottom right, #ffdee9, #b5fffc);
       font-family: 'Arial', sans-serif;
       text-align: center;
       color: #d6336c;
@@ -63,7 +63,7 @@
 </head>
 <body>
   <h1>张铭津 ❤️ 梁玉薪</h1>
-  <div class="love">我们在一起的第 <span id="days"></span> 天</div>
+  <div class="love">我们在一起的第 <strong>195</strong> 天</div>
 
   <section>
     <h2>我们的故事</h2>
@@ -86,11 +86,6 @@
   </section>
 
   <script>
-    const startDate = new Date("2023-06-01");
-    const today = new Date();
-    const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-    document.getElementById("days").textContent = daysTogether;
-
     function createHeart() {
       const heart = document.createElement('div');
       heart.className = 'heart';
