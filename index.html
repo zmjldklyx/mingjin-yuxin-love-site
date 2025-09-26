@@ -1,101 +1,104 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>张铭津 ❤️ 梁玉薪</title>
+  <title>铭津 ❤️ 玉薪</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: linear-gradient(to bottom right, #ffdee9, #b5fffc);
-      font-family: 'Arial', sans-serif;
-      text-align: center;
-      color: #d6336c;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe4e1, #ffc0cb);
+      overflow-x: hidden;
+    }
+
+    /* 爱心背景 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: url('https://i.imgur.com/3ZQ3Z4F.png');
+      background-repeat: repeat;
+      opacity: 0.1;
+      z-index: -1;
     }
 
     h1 {
-      font-size: 3em;
-      margin-top: 40px;
+      text-align: center;
+      color: #d6336c;
+      margin-top: 30px;
+      font-size: 2.5em;
     }
 
-    .love {
-      font-size: 2em;
-      margin: 20px 0;
-    }
-
-    section {
+    .slideshow-container {
+      max-width: 800px;
       margin: 40px auto;
-      max-width: 600px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
     }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      font-size: 1.2em;
+    .mySlides {
+      display: none;
     }
 
-    li::before {
-      content: "💖 ";
+    .mySlides img {
+      width: 100%;
+      border-radius: 12px;
     }
 
-    .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-image: url('https://i.imgur.com/3ZQ3Z4F.png');
-      background-size: cover;
-      animation: fall linear infinite;
-      z-index: 0;
+    .fade {
+      animation: fade 1.5s ease-in-out;
     }
 
-    @keyframes fall {
-      0% {
-        transform: translateY(-100px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh);
-        opacity: 0;
-      }
+    @keyframes fade {
+      from {opacity: 0.4}
+      to {opacity: 1}
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 1em;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <h1>张铭津 ❤️ 梁玉薪</h1>
-  <div class="love">我们在一起的第 <strong>195</strong> 天</div>
 
-  <section>
-    <h2>我们的故事</h2>
-    <p>从第一次遇见你，我的世界就开始变得温柔。</p>
-  </section>
+  <h1>我们已经相爱 195 天 💑</h1>
 
-  <section>
-    <h2>恋爱清单</h2>
-    <ul>
-      <li>一起看星星</li>
-      <li>一起做饭</li>
-      <li>一起旅行</li>
-      <li>一起写下我们的未来</li>
-    </ul>
-  </section>
+  <div class="slideshow-container">
+    <div class="mySlides fade"><img src="images/photo1.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo2.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo3.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo4.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo5.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo6.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo7.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo8.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo9.jpg"></div>
+    <div class="mySlides fade"><img src="images/photo10.jpg"></div>
+  </div>
 
-  <section>
-    <h2>写给梁玉薪的一句话</h2>
-    <p>“你是我心里最柔软的光。” —— 张铭津</p>
-  </section>
+  <div class="footer">
+    铭津 ❤️ 玉薪 · 永远在一起
+  </div>
 
   <script>
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.animationDuration = (3 + Math.random() * 5) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 8000);
+    let slideIndex = 0;
+    function showSlides() {
+      let slides = document.getElementsByClassName("mySlides");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1 }
+      slides[slideIndex-1].style.display = "block";
+      setTimeout(showSlides, 3000);
     }
-
-    setInterval(createHeart, 300);
+    showSlides();
   </script>
+
 </body>
 </html>
