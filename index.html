@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>张铭津 ❤️ 梁玉薪</title>
+  <style>
+    body {
+      font-family: 'Arial';
+      background: linear-gradient(to bottom right, #ffe4e1, #fff0f5);
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      color: #d6336c;
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+    .love {
+      font-size: 2em;
+      color: #ff69b4;
+      margin: 20px 0;
+    }
+    section {
+      margin: 40px 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      font-size: 1.2em;
+    }
+    li::before {
+      content: "💖 ";
+    }
+  </style>
+</head>
+<body>
+  <h1>张铭津 ❤️ 梁玉薪</h1>
+  <div class="love">我们在一起的第 <span id="days"></span> 天</div>
+
+  <section>
+    <h2>我们的故事</h2>
+    <p>从第一次遇见你，我的世界就开始变得温柔。</p>
+  </section>
+
+  <section>
+    <h2>恋爱清单</h2>
+    <ul>
+      <li>一起看星星</li>
+      <li>一起做饭</li>
+      <li>一起旅行</li>
+      <li>一起写下我们的未来</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>写给梁玉薪的一句话</h2>
+    <p>“你是我心里最柔软的光。” —— 张铭津</p>
+  </section>
+
+  <script>
+    const startDate = new Date("2023-06-01"); // 你们在一起的日期
+    const today = new Date();
+    const daysTogether = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+    document.getElementById("days").textContent = daysTogether;
+  </script>
+</body>
+</html>
