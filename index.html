@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>纪念日 · 铭津 ❤️ 玉薪</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
@@ -56,35 +57,6 @@
       box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
     }
 
-    section {
-      margin: 40px auto;
-      max-width: 900px;
-    }
-
-    section h2 {
-      font-size: 1.8em;
-      color: #d6336c;
-      margin-bottom: 20px;
-    }
-
-    .photo-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .photo-gallery img {
-      width: 180px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-
-    .photo-gallery img:hover {
-      transform: scale(1.05);
-    }
-
     .footer {
       padding: 20px;
       font-size: 1em;
@@ -117,6 +89,15 @@
       from { top: 60%; opacity: 1; }
       to { top: 10%; opacity: 0; }
     }
+
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 1.8em; margin-top: 20px; }
+      #countdown { font-size: 1.2em; margin-bottom: 15px; }
+      .button-group { flex-direction: column; gap: 10px; padding: 0 20px; }
+      .button-group button { width: 100%; font-size: 1em; padding: 12px; }
+      .danmu { font-size: 1.2em; }
+      .footer { font-size: 0.9em; padding: 15px; }
+    }
   </style>
 </head>
 <body>
@@ -125,25 +106,9 @@
 
   <div class="button-group">
     <button onclick="alert('功能开发中')">点点滴滴</button>
-    <button onclick="alert('功能开发中')">恋爱相册</button>
+    <button onclick="location.href='photo.html'">恋爱相册</button>
     <button onclick="alert('铭津 ❤️ 玉薪，永远在一起')">关于我们</button>
   </div>
-
-  <section id="love-photo">
-    <h2>Love Photo</h2>
-    <div class="photo-gallery">
-      <img src="images/photo1.jpg" alt="甜蜜回忆1">
-      <img src="images/photo2.jpg" alt="甜蜜回忆2">
-      <img src="images/photo3.jpg" alt="甜蜜回忆3">
-      <img src="images/photo4.jpg" alt="甜蜜回忆4">
-      <img src="images/photo5.jpg" alt="甜蜜回忆5">
-      <img src="images/photo6.jpg" alt="甜蜜回忆6">
-      <img src="images/photo7.jpg" alt="甜蜜回忆7">
-      <img src="images/photo8.jpg" alt="甜蜜回忆8">
-      <img src="images/photo9.jpg" alt="甜蜜回忆9">
-      <img src="images/photo10.jpg" alt="甜蜜回忆10">
-    </div>
-  </section>
 
   <div id="danmu-container"></div>
 
