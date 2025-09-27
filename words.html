@@ -104,6 +104,17 @@
   <button class="back-button" onclick="location.href='index.html'">返回主页</button>
 
   <script>
+    // 加载已保存的留言
+    window.onload = function() {
+      const saved = localStorage.getItem("loveMessages");
+      if (saved) {
+        const messages = JSON.parse(saved);
+        messages.reverse().forEach(msg => {
+          insertMessage(msg.text, msg.date);
+        });
+      }
+    };
+
     function addMessage() {
       const text = document.getElementById("new-message").value.trim();
       if (text === "") return;
@@ -111,14 +122,25 @@
       const now = new Date();
       const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
+      insertMessage(text, dateStr);
+      saveMessage(text, dateStr);
+
+      document.getElementById("new-message").value = "";
+    }
+
+    function insertMessage(text, dateStr) {
       const card = document.createElement("div");
       card.className = "message-card";
       card.innerHTML = `<p>${text}</p><span class="date">铭津 · ${dateStr}</span>`;
-
       const list = document.getElementById("message-list");
-      list.insertBefore(card, list.firstChild); // 最新留言放最上面
+      list.insertBefore(card, list.firstChild);
+    }
 
-      document.getElementById("new-message").value = "";
+    function saveMessage(text, dateStr) {
+      const saved = localStorage.getItem("loveMessages");
+      const messages = saved ? JSON.parse(saved) : [];
+      messages.push({ text, date: dateStr });
+      localStorage.setItem("loveMessages", JSON.stringify(messages));
     }
   </script>
 </body>
