@@ -72,6 +72,29 @@
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-100px); opacity: 0; }
     }
+
+    #loveList {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+    }
+
+    #loveList li {
+      padding: 8px 0;
+      font-size: 16px;
+      color: #444;
+      position: relative;
+      padding-left: 24px;
+      transition: all 0.3s ease;
+    }
+
+    #loveList li::before {
+      content: "❤";
+      position: absolute;
+      left: 0;
+      color: #d6336c;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -97,6 +120,17 @@
       <h2>照片回忆</h2>
       <p>每一张照片，都是我们爱的见证。</p>
       <a class="link" href="photo.html">查看照片</a>
+    </div>
+
+    <div class="card">
+      <h2>恋爱清单</h2>
+      <ul id="loveList">
+        <li>一起去看海 🌊</li>
+        <li>一起做饭 🍳</li>
+        <li>一起拍一张傻傻的合照 📸</li>
+        <li>一起写一封情书 💌</li>
+        <li>一起看一场日落 🌅</li>
+      </ul>
     </div>
   </div>
 
