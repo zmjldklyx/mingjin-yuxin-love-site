@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>铭津 ♥ 玉薪</title>
+  <title>铭津 ♥ 玉薪的小窝</title>
   <style>
     body {
       margin: 0;
@@ -95,9 +95,43 @@
       color: #d6336c;
       font-size: 16px;
     }
+
+    /* 欢迎遮罩样式 */
+    #welcomeOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to bottom right, #ffc0cb, #ffe4e1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 28px;
+      color: #d6336c;
+      font-weight: bold;
+      transition: opacity 1s ease;
+    }
+
+    #welcomeOverlay button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #d6336c;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
+  <!-- 欢迎遮罩 -->
+  <div id="welcomeOverlay">
+    欢迎来到铭津 ♥ 玉薪的小窝
+    <button onclick="enterSite()">进入小窝</button>
+  </div>
+
   <div class="container">
     <div class="header">
       <h1>铭津 ♥ 玉薪</h1>
@@ -137,6 +171,13 @@
   <div class="floating-text">铭津 ♥ 玉薪</div>
 
   <script>
+    // 欢迎遮罩淡出
+    function enterSite() {
+      const overlay = document.getElementById("welcomeOverlay");
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.style.display = "none", 1000);
+    }
+
     // 纪念日计数（起始日期：2025年3月15日）
     const startDate = new Date("2025-03-15");
     const today = new Date();
