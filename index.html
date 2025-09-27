@@ -11,31 +11,14 @@
       background: linear-gradient(to bottom right, #ffe4e1, #ffc0cb);
       overflow-x: hidden;
     }
-
     .container {
       max-width: 800px;
       margin: 0 auto;
       padding: 20px;
     }
-
-    .header {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .header h1 {
-      font-size: 2.5em;
-      color: #d6336c;
-      margin: 0;
-    }
-
-    .quote {
-      text-align: center;
-      font-style: italic;
-      color: #555;
-      margin-bottom: 30px;
-    }
-
+    .header { text-align: center; margin-bottom: 10px; }
+    .header h1 { font-size: 2.5em; color: #d6336c; margin: 0; }
+    .quote { text-align: center; font-style: italic; color: #555; margin-bottom: 30px; }
     .card {
       background: #fff;
       border-radius: 12px;
@@ -43,12 +26,7 @@
       margin-bottom: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
-    .card h2 {
-      margin-top: 0;
-      color: #d6336c;
-    }
-
+    .card h2 { margin-top: 0; color: #d6336c; }
     .link {
       display: inline-block;
       margin-top: 10px;
@@ -58,7 +36,6 @@
       border-radius: 8px;
       text-decoration: none;
     }
-
     .floating-text {
       position: fixed;
       bottom: 20px;
@@ -67,12 +44,10 @@
       color: #d6336c;
       animation: floatUp 6s infinite;
     }
-
     @keyframes floatUp {
       0% { transform: translateY(0); opacity: 1; }
       100% { transform: translateY(-100px); opacity: 0; }
     }
-
     #welcomeOverlay {
       position: fixed;
       top: 0; left: 0;
@@ -88,7 +63,6 @@
       font-weight: bold;
       transition: opacity 1s ease;
     }
-
     #welcomeOverlay button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -99,15 +73,14 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
     input[type="text"], input[type="file"] {
       margin-top: 10px;
       padding: 8px;
       width: 100%;
       border: 1px solid #ccc;
       border-radius: 6px;
+      box-sizing: border-box;
     }
-
     button {
       margin-top: 10px;
       padding: 8px 12px;
@@ -117,20 +90,18 @@
       border-radius: 6px;
       cursor: pointer;
     }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
+    ul { list-style: none; padding-left: 0; }
     li {
       padding: 8px 0;
       font-size: 16px;
       color: #444;
       position: relative;
       padding-left: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
-
     li::before {
       content: "❤";
       position: absolute;
@@ -138,12 +109,27 @@
       color: #d6336c;
       font-size: 16px;
     }
-
     img {
       max-width: 100%;
       border-radius: 8px;
       margin-top: 10px;
+      display: block;
     }
+    /* gallery */
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 10px; }
+    .photo-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .photo-card .btn-row { width: 100%; display:flex; gap:8px; justify-content:center; }
+    .small-btn { padding:6px 10px; border-radius:6px; border:none; background:#d6336c; color:#fff; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -153,9 +139,7 @@
   </div>
 
   <div class="container">
-    <div class="header">
-      <h1>铭津 ♥ 玉薪</h1>
-    </div>
+    <div class="header"><h1>铭津 ♥ 玉薪</h1></div>
 
     <div class="quote" id="dailyQuote">“你是我心中最柔软的光。”</div>
 
@@ -173,7 +157,8 @@
     <div class="card">
       <h2>照片回忆</h2>
       <input type="file" accept="image/*" id="photoUpload" />
-      <div id="photoGallery"></div>
+      <div class="gallery" id="photoGallery"></div>
+      <p style="font-size:12px;color:#888;margin-top:8px;">说明：页面会显示仓库中名为 photo1.jpg 到 photo10.jpg 的图片（若已上传）；你上传的照片会保存在浏览器 localStorage，可删除。</p>
     </div>
 
     <div class="card">
@@ -187,18 +172,24 @@
   <div class="floating-text">铭津 ♥ 玉薪</div>
 
   <script>
+    // 进入遮罩
     function enterSite() {
       const overlay = document.getElementById("welcomeOverlay");
       overlay.style.opacity = "0";
-      setTimeout(() => overlay.style.display = "none", 1000);
+      setTimeout(() => overlay.style.display = "none", 400);
     }
 
+    // 纪念日计数
     const startDate = new Date("2025-03-15");
-    const today = new Date();
-    const diffTime = today - startDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    document.getElementById("daysTogether").textContent = diffDays;
+    function updateDays() {
+      const today = new Date();
+      const diffTime = today - startDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("daysTogether").textContent = diffDays;
+    }
+    updateDays();
 
+    // 每日情话
     const quotes = [
       "你是我心中最柔软的光。",
       "每一天醒来，最想见的人是你。",
@@ -206,75 +197,130 @@
       "你笑的样子，是我最爱的风景。",
       "世界很大，但我只想和你一起走。"
     ];
-    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-    document.getElementById("dailyQuote").textContent = `“${randomQuote}”`;
+    document.getElementById("dailyQuote").textContent = `“${quotes[Math.floor(Math.random() * quotes.length)]}”`;
 
-    // 照片回忆功能
+    /* ---------- 照片回忆（显示 preset photo1..photo10 + 用户上传并可删除） ---------- */
     const gallery = document.getElementById("photoGallery");
-    const storedPhotos = JSON.parse(localStorage.getItem("photos")) || [];
+    let storedPhotos = JSON.parse(localStorage.getItem("photos")) || [];
+
+    // 预设仓库图片（假设放在仓库根目录或按需调整路径）
+    const presetPhotos = [];
+    for (let i = 1; i <= 10; i++) {
+      presetPhotos.push(`photo${i}.jpg`);
+    }
 
     function renderPhotos() {
       gallery.innerHTML = "";
-      storedPhotos.forEach((src, index) => {
+      // 先显示预设图片（不可删除）
+      presetPhotos.forEach((src) => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
         const img = document.createElement("img");
         img.src = src;
+        img.alt = src;
+        card.appendChild(img);
+        gallery.appendChild(card);
+      });
 
+      // 再显示用户上传的图片（可删除）
+      storedPhotos.forEach((src, index) => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = `uploaded-${index}`;
+        const btnRow = document.createElement("div");
+        btnRow.className = "btn-row";
         const delBtn = document.createElement("button");
+        delBtn.className = "small-btn";
         delBtn.textContent = "删除这张照片";
         delBtn.onclick = () => {
-          storedPhotos.splice(index, 1);
-          localStorage.setItem("photos", JSON.stringify(storedPhotos));
-          renderPhotos();
+          if (confirm("确认删除这张上传的照片吗？")) {
+            storedPhotos.splice(index, 1);
+            localStorage.setItem("photos", JSON.stringify(storedPhotos));
+            renderPhotos();
+          }
         };
-
-        const wrapper = document.createElement("div");
-        wrapper.appendChild(img);
-        wrapper.appendChild(delBtn);
-        gallery.appendChild(wrapper);
+        btnRow.appendChild(delBtn);
+        card.appendChild(img);
+        card.appendChild(btnRow);
+        gallery.appendChild(card);
       });
     }
 
     document.getElementById("photoUpload").addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          storedPhotos.push(reader.result);
-          localStorage.setItem("photos", JSON.stringify(storedPhotos));
-          renderPhotos();
-        };
-        reader.readAsDataURL(file);
-      }
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        storedPhotos.push(reader.result);
+        localStorage.setItem("photos", JSON.stringify(storedPhotos));
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
+      // 清空选择以便重复上传相同文件名也能触发 change
+      e.target.value = "";
     });
 
     renderPhotos();
 
-    // 恋爱清单功能
-    const loveList = document.getElementById("loveList");
-    const storedItems = JSON.parse(localStorage.getItem("loveItems")) || [];
+    /* ---------- 恋爱清单（保留原始五项，localStorage 优先） ---------- */
+    const loveListEl = document.getElementById("loveList");
+    const defaultItems = [
+      "一起去看海 🌊",
+      "一起做饭 🍳",
+      "一起拍一张傻傻的合照 📸",
+      "一起写一封情书 💌",
+      "一起看一场日落 🌅"
+    ];
+    const loaded = JSON.parse(localStorage.getItem("loveItems"));
+    let loveItems = (Array.isArray(loaded) && loaded.length > 0) ? loaded : defaultItems.slice();
+
+    function syncLoveItems() {
+      localStorage.setItem("loveItems", JSON.stringify(loveItems));
+    }
 
     function renderList() {
-      loveList.innerHTML = "";
-      storedItems.forEach((text, index) => {
+      loveListEl.innerHTML = "";
+      loveItems.forEach((text, index) => {
         const li = document.createElement("li");
-        li.textContent = text;
+        const span = document.createElement("span");
+        span.textContent = text;
+        span.style.flex = "1";
+        li.appendChild(span);
+
+        const btns = document.createElement("div");
+        btns.style.display = "flex";
+        btns.style.gap = "8px";
 
         const delBtn = document.createElement("button");
+        delBtn.className = "small-btn";
         delBtn.textContent = "删除";
-        delBtn.style.marginLeft = "10px";
         delBtn.onclick = () => {
-          storedItems.splice(index, 1);
-          localStorage.setItem("loveItems", JSON.stringify(storedItems));
-          renderList();
+          if (confirm("确认删除这项吗？")) {
+            loveItems.splice(index, 1);
+            syncLoveItems();
+            renderList();
+          }
         };
 
-        li.appendChild(delBtn);
-        loveList.appendChild(li);
+        btns.appendChild(delBtn);
+        li.appendChild(btns);
+        loveListEl.appendChild(li);
       });
+    }
+
+    function addItem() {
+      const input = document.getElementById("newItem");
+      const value = input.value.trim();
+      if (!value) return;
+      loveItems.push(value);
+      syncLoveItems();
+      input.value = "";
+      renderList();
     }
 
     renderList();
   </script>
 </body>
 </html>
-
