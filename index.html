@@ -1,225 +1,362 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>铭津 ♥ 玉薪的小窝</title>
+
+  <!-- 字体（可改为本地字体或替换路径） -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
   <style>
-    body { margin:0; font-family:'Segoe UI',sans-serif; background:linear-gradient(to bottom right,#ffe4e1,#ffc0cb); overflow-x:hidden; }
-    .container{max-width:800px;margin:0 auto;padding:20px;}
-    .header{text-align:center;margin-bottom:10px;}
-    .header h1{font-size:2.5em;color:#d6336c;margin:0;}
-    .quote{text-align:center;font-style:italic;color:#555;margin-bottom:30px;}
-    .card{background:#fff;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-    .card h2{margin-top:0;color:#d6336c;}
-    .link{display:inline-block;margin-top:10px;padding:8px 16px;background:#d6336c;color:#fff;border-radius:8px;text-decoration:none;}
-    .floating-text{position:fixed;bottom:20px;right:20px;font-size:14px;color:#d6336c;animation:floatUp 6s infinite;}
-    @keyframes floatUp{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-100px);opacity:0}}
-    #welcomeOverlay{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(to bottom right,#ffc0cb,#ffe4e1);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-size:28px;color:#d6336c;font-weight:bold;transition:opacity 1s ease;}
-    #welcomeOverlay button{margin-top:20px;padding:10px 20px;font-size:18px;background:#d6336c;color:#fff;border:none;border-radius:8px;cursor:pointer;}
-    input[type="text"], input[type="file"]{margin-top:10px;padding:8px;width:100%;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;}
-    button{margin-top:10px;padding:8px 12px;background:#d6336c;color:#fff;border:none;border-radius:6px;cursor:pointer;}
-    ul{list-style:none;padding-left:0;}
-    li{padding:8px 0;font-size:16px;color:#444;position:relative;padding-left:24px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-    li::before{content:"❤";position:absolute;left:0;color:#d6336c;font-size:16px;}
-    img{max-width:100%;border-radius:8px;margin-top:10px;display:block;}
+    :root{
+      --pink-1: #ffe8ec;
+      --pink-2: #ffc9d6;
+      --accent: #d6336c;
+      --muted: #6b6b6b;
+      --card-bg: rgba(255,255,255,0.9);
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 8px 20px rgba(214,51,108,0.08);
+      --radius: 14px;
+      --max-width: 980px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Noto Sans SC', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(135deg,var(--pink-1),var(--pink-2));
+      -webkit-font-smoothing:antialiased;
+      color:#333;
+      display:flex;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .site{
+      width:100%;
+      max-width:var(--max-width);
+      margin:0 auto;
+    }
+
+    header.top {
+      display:flex;
+      gap:16px;
+      align-items:center;
+      margin-bottom:18px;
+      padding:18px;
+      border-radius:20px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.12));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    .brand {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex:1;
+    }
+    .avatar {
+      width:74px; height:74px; border-radius:50%;
+      overflow:hidden; flex-shrink:0;
+      border: 3px solid rgba(255,255,255,0.8);
+      box-shadow: 0 6px 18px rgba(214,51,108,0.12);
+    }
+    .avatar img{width:100%;height:100%;object-fit:cover;display:block}
+    .title {
+      display:flex; flex-direction:column;
+    }
+    .title h1{margin:0;font-family:'Great Vibes', cursive; font-size:34px; color:var(--accent); line-height:1}
+    .title p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+
+    .controls { text-align:right; min-width:160px; }
+    .enter-btn { background:var(--accent); color:#fff; border:none; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:600; box-shadow: 0 6px 16px rgba(214,51,108,0.12); }
+    .enter-btn.secondary { background:transparent; color:var(--accent); border:1px solid rgba(214,51,108,0.12); }
+
+    .quote-box {
+      text-align:center;
+      margin-bottom:18px;
+      font-style:italic;
+      color: #444;
+      background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.35));
+      padding:14px 18px;
+      border-radius:12px;
+      box-shadow: var(--shadow);
+    }
+    .grid {
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+    /* Left column cards */
+    .left-col { display:flex; flex-direction:column; gap:14px; }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.08) }
+
+    .card h2 { margin:0 0 10px 0; color:var(--accent) }
+
+    .muted { color:var(--muted); font-size:13px }
+
     /* gallery */
-    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:10px;}
-    .photo-card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 4px 12px rgba(0,0,0,0.06);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;}
-    .photo-card .btn-row{width:100%;display:flex;gap:8px;justify-content:center;}
-    .small-btn{padding:6px 10px;border-radius:6px;border:none;background:#d6336c;color:#fff;cursor:pointer;}
-    .caption{font-size:13px;color:#666;margin-top:4px;}
-    .completed{text-decoration:line-through;color:#888;}
+    .gallery { display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:12px; margin-top:10px; }
+    .photo-card {
+      border-radius:12px; overflow:hidden; background:linear-gradient(180deg,#fff,#fff);
+      display:flex; flex-direction:column; justify-content:space-between; align-items:center; padding:8px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .photo-card img { width:100%; height:140px; object-fit:cover; border-radius:8px; display:block; cursor:zoom-in; }
+    .photo-card:hover{ transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.08) }
+    .photo-card .caption { font-size:13px; color:#666; padding:8px 6px; text-align:center; min-height:38px; }
+
+    .photo-actions { display:flex; gap:8px; margin-top:6px; }
+    .btn { background:var(--accent); color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-size:13px; }
+    .btn.ghost { background:transparent; color:var(--accent); border:1px solid rgba(214,51,108,0.12) }
+
+    /* right column */
+    .right-col { display:flex; flex-direction:column; gap:14px; }
+    .sticky { position:sticky; top:26px; }
+
+    /* love list */
+    #progressBar {
+      height:12px; background: linear-gradient(90deg,#ffe6ef,#ffd8e6); border-radius:8px; overflow:hidden; margin:10px 0;
+    }
+    #progressInner { height:100%; background: linear-gradient(90deg,#ff8bb0,#d6336c); width:0%; transition:width .6s ease; }
+
+    .love-list ul{ margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+    .love-item { display:flex; gap:8px; align-items:center; justify-content:space-between; padding:8px; border-radius:10px; background:rgba(255,255,255,0.8) }
+
+    .item-left { display:flex; gap:8px; align-items:center; flex:1 }
+    .item-left input[type="checkbox"]{ transform:scale(1.15) }
+    .item-left .text { font-size:15px }
+
+    .small { font-size:12px; color:#777 }
+
     /* lightbox */
-    #lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:20000;padding:20px;}
-    #lightbox img{max-width:90%;max-height:80%;border-radius:8px;display:block;}
-    #lightbox .caption{color:#fff;margin-top:12px;text-align:center;}
-    #lightbox .close-btn{position:absolute;top:20px;right:20px;padding:8px 12px;background:#fff;color:#d6336c;border-radius:6px;border:none;cursor:pointer;}
-    .edit-input{width:100%;padding:6px;border:1px solid #ccc;border-radius:6px;}
-    .row{display:flex;gap:8px;align-items:center;}
+    #lightbox { display:none; position:fixed; inset:0; background: rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center; padding:20px; }
+    #lightbox .inner { max-width:960px; width:100%; }
+    #lightbox img { width:100%; height:auto; border-radius:12px; }
+    #lightbox .caption { margin-top:8px; color:#fff; text-align:center }
+
+    footer { margin-top:18px; text-align:center; color:var(--muted); font-size:13px }
   </style>
 </head>
 <body>
-  <div id="welcomeOverlay">欢迎来到铭津 ♥ 玉薪的小窝
-    <button onclick="enterSite()">进入小窝</button>
+  <div class="site">
+    <header class="top">
+      <div class="brand">
+        <div class="avatar">
+          <img src="photo1.jpg" alt="头像（可替换）" onerror="this.src='https://via.placeholder.com/150?text=❤'">
+        </div>
+        <div class="title">
+          <h1>铭津 ♥ 玉薪</h1>
+          <p>我们的小窝 · 记录每一次笑与拥抱</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div style="margin-bottom:8px;color:var(--muted);font-size:13px">当前：温柔模式</div>
+        <button class="enter-btn" onclick="enterSite()">进入小窝</button>
+      </div>
+    </header>
+
+    <div class="quote-box" id="dailyQuote">“你是我心中最柔软的光。”</div>
+
+    <div class="grid">
+      <div class="left-col">
+        <div class="card">
+          <h2>我们的纪念日</h2>
+          <p class="muted">从 2025-03-15 开始，我们已经一起走过 <strong id="daysTogether">...</strong> 天。</p>
+        </div>
+
+        <div class="card">
+          <h2>照片回忆</h2>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input id="photoUpload" type="file" accept="image/*" style="flex:1" />
+            <button id="addFromUrl" class="btn ghost" title="添加远程图片">从 URL 添加</button>
+          </div>
+
+          <div class="gallery" id="photoGallery"></div>
+          <p class="small muted">展示仓库图片 photo1.jpg 至 photo10.jpg（若存在）与你上传的本地照片；上传的照片储存在浏览器，不会自动推送到仓库。</p>
+        </div>
+
+        <div class="card">
+          <h2>留言墙（预览）</h2>
+          <p class="muted">点击“进入留言墙”写下不想忘记的话。</p>
+          <a class="btn" href="words.html">进入留言墙</a>
+        </div>
+      </div>
+
+      <aside class="right-col">
+        <div class="card sticky">
+          <h2>恋爱清单</h2>
+          <div id="progressBar"><div id="progressInner"></div></div>
+          <div style="display:flex;gap:8px">
+            <input id="newItem" type="text" placeholder="输入新的恋爱目标..." />
+            <button class="btn" onclick="addItem()">添加</button>
+          </div>
+          <div class="love-list">
+            <ul id="loveList"></ul>
+          </div>
+        </div>
+
+        <div class="card sticky">
+          <h2>小提示</h2>
+          <p class="small muted">试试点击相片进入灯箱，或为照片添加一句描述；清单项可编辑、标记完成并显示完成日期。</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>© 铭津 & 玉薪 · 小窝</footer>
   </div>
-
-  <div class="container">
-    <div class="header"><h1>铭津 ♥ 玉薪</h1></div>
-
-    <div class="quote" id="dailyQuote">“你是我心中最柔软的光。”</div>
-
-    <div class="card">
-      <h2>我们的纪念日</h2>
-      <p>从2025年3月15日开始，我们已经一起走过 <span id="daysTogether">...</span> 天。</p>
-    </div>
-
-    <div class="card">
-      <h2>想对对方说的话</h2>
-      <p>把你想对玉薪说的每一句话都写下来，让爱在字里行间流动。</p>
-      <a class="link" href="words.html">进入留言墙</a>
-    </div>
-
-    <div class="card">
-      <h2>照片回忆</h2>
-      <input type="file" accept="image/*" id="photoUpload" />
-      <div class="gallery" id="photoGallery"></div>
-      <p style="font-size:12px;color:#888;margin-top:8px;">说明：页面会显示仓库中名为 photo1.jpg 到 photo10.jpg 的图片（若已上传）；你上传的照片会保存在浏览器 localStorage，可编辑描述或删除。</p>
-    </div>
-
-    <div class="card">
-      <h2>恋爱清单</h2>
-      <input type="text" id="newItem" placeholder="输入新的恋爱目标..." />
-      <button onclick="addItem()">添加</button>
-      <ul id="loveList"></ul>
-    </div>
-  </div>
-
-  <div class="floating-text">铭津 ♥ 玉薪</div>
 
   <!-- Lightbox -->
   <div id="lightbox" onclick="closeLightbox(event)">
-    <button class="close-btn" onclick="closeLightbox(event)">关闭</button>
-    <div id="lightboxInner" style="text-align:center;">
-      <img id="lightboxImg" src="" alt="preview" />
+    <div class="inner" onclick="event.stopPropagation()">
+      <img id="lightboxImg" src="" alt="预览" />
       <div class="caption" id="lightboxCaption"></div>
+      <div style="text-align:center;margin-top:10px">
+        <button class="btn" onclick="copyCaption()" style="margin-right:8px">复制描述 / 情话</button>
+        <button class="btn ghost" onclick="closeLightbox(event)">关闭</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // 进入遮罩
-    function enterSite() {
-      const overlay = document.getElementById("welcomeOverlay");
-      overlay.style.opacity = "0";
-      setTimeout(() => overlay.style.display = "none", 400);
-    }
+    // 进入遮罩（覆盖 header 的 Enter 已经移除遮罩概念，这里保留函数用于兼容）
+    function enterSite(){ window.scrollTo({top:0,behavior:'smooth'}); }
 
-    // 纪念日计数
+    // 纪念日
     const startDate = new Date("2025-03-15");
     function updateDays(){
       const today = new Date();
-      const diffTime = today - startDate;
-      const diffDays = Math.floor(diffTime / (1000*60*60*24));
-      document.getElementById("daysTogether").textContent = diffDays;
+      const diff = Math.floor((today - startDate)/(1000*60*60*24));
+      document.getElementById('daysTogether').textContent = diff;
     }
     updateDays();
 
-    // 每日情话
+    // 随机情话
     const quotes = [
-      "你是我心中最柔软的光。",
-      "每一天醒来，最想见的人是你。",
+      "你的笑容，是我最爱的风景。",
+      "和你在一起的每一天，都是节日。",
       "爱你，是我最坚定的选择。",
-      "你笑的样子，是我最爱的风景。",
-      "世界很大，但我只想和你一起走。"
+      "世界很大，但我只想和你一起走。",
+      "你是我心中最柔软的光。"
     ];
-    document.getElementById("dailyQuote").textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
+    document.getElementById('dailyQuote').textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
 
-    /* ---------- 照片回忆（preset photo1..photo10 + 用户上传，可编辑描述、删除、灯箱预览） ---------- */
-    const gallery = document.getElementById("photoGallery");
-    let storedPhotos = JSON.parse(localStorage.getItem("photos")) || []; 
-    // storedPhotos array of { src: dataUrl, caption: "" }
-
-    // 预设仓库图片（如需子目录请修改路径）
+    /* ---------- 相册（preset photo1..photo10 + 上传） ---------- */
+    const gallery = document.getElementById('photoGallery');
+    let storedPhotos = JSON.parse(localStorage.getItem('photos')) || []; // [{src, caption}]
     const presetPhotos = [];
-    for (let i=1;i<=10;i++){ presetPhotos.push({src:`photo${i}.jpg`, caption:""}); }
+    for(let i=1;i<=10;i++){ presetPhotos.push({src:`photo${i}.jpg`, caption:''}); }
 
-    function openLightbox(src, caption){
-      const lb = document.getElementById("lightbox");
-      document.getElementById("lightboxImg").src = src;
-      document.getElementById("lightboxCaption").textContent = caption || "";
-      lb.style.display = "flex";
-    }
-    function closeLightbox(e){
-      if(e && e.target && (e.target.id === "lightbox" || e.target.classList.contains("close-btn"))){
-        document.getElementById("lightbox").style.display = "none";
-      }
-      // prevent click bubbling from inner close
-      if (e) e.stopPropagation();
-    }
+    // 一组自动情话/描述（按上传顺序循环）
+    const photoQuotes = [
+      "你的笑容，让春天提前到来。",
+      "和你牵手，走过每一条街。",
+      "愿时间温柔以待我们的小日子。",
+      "你的名字，是我最温柔的念想。",
+      "每天都想把世界的好给你看。"
+    ];
 
     function renderPhotos(){
-      gallery.innerHTML = "";
-      // preset (不可删除，但可预览)
-      presetPhotos.forEach(p => {
-        const card = document.createElement("div"); card.className="photo-card";
-        const img = document.createElement("img"); img.src = p.src; img.alt = p.src;
-        img.style.cursor = "zoom-in";
-        img.onclick = () => openLightbox(p.src, p.caption);
+      gallery.innerHTML = '';
+      // preset images first
+      presetPhotos.forEach(p=>{
+        const card = document.createElement('div'); card.className='photo-card';
+        const img = document.createElement('img'); img.src=p.src; img.alt=p.src;
+        img.onclick = ()=>openLightbox(p.src, p.caption || '');
         card.appendChild(img);
-        if(p.caption){
-          const c = document.createElement("div"); c.className="caption"; c.textContent = p.caption; card.appendChild(c);
-        }
+        const cap = document.createElement('div'); cap.className='caption'; cap.textContent = p.caption || '仓库图片';
+        card.appendChild(cap);
         gallery.appendChild(card);
       });
-      // uploaded (可编辑描述、删除、预览)
-      storedPhotos.forEach((obj, idx) => {
-        const card = document.createElement("div"); card.className="photo-card";
-        const img = document.createElement("img"); img.src = obj.src; img.alt = `uploaded-${idx}`;
-        img.style.cursor = "zoom-in";
-        img.onclick = () => openLightbox(obj.src, obj.caption);
+
+      // uploaded photos
+      storedPhotos.forEach((obj, idx)=>{
+        const card = document.createElement('div'); card.className='photo-card';
+        const img = document.createElement('img'); img.src = obj.src; img.alt = `uploaded-${idx}`;
+        img.onclick = ()=>openLightbox(obj.src, obj.caption || photoQuotes[idx % photoQuotes.length]);
         card.appendChild(img);
 
-        // caption display or edit
-        const captionDiv = document.createElement("div");
-        captionDiv.style.width = "100%";
-        if(obj.caption){
-          const c = document.createElement("div"); c.className="caption"; c.textContent = obj.caption; captionDiv.appendChild(c);
-        } else {
-          const c = document.createElement("div"); c.className="caption"; c.textContent = "（无描述）"; captionDiv.appendChild(c);
-        }
+        const caption = document.createElement('div'); caption.className='caption';
+        caption.textContent = obj.caption || photoQuotes[idx % photoQuotes.length];
+        caption.title = '点击编辑描述';
+        caption.style.cursor = 'pointer';
+        caption.onclick = ()=> editCaption(idx);
+        card.appendChild(caption);
 
-        // buttons: edit caption, delete
-        const btnRow = document.createElement("div"); btnRow.className="btn-row";
-        const editBtn = document.createElement("button"); editBtn.className="small-btn"; editBtn.textContent="编辑描述";
-        editBtn.onclick = () => {
-          // replace captionDiv with input + save/cancel
-          captionDiv.innerHTML = '';
-          const input = document.createElement("input"); input.className="edit-input"; input.value = obj.caption || "";
-          const save = document.createElement("button"); save.className="small-btn"; save.textContent="保存";
-          const cancel = document.createElement("button"); cancel.className="small-btn"; cancel.textContent="取消";
-          save.onclick = () => {
-            obj.caption = input.value.trim();
-            localStorage.setItem("photos", JSON.stringify(storedPhotos));
-            renderPhotos();
-          };
-          cancel.onclick = () => renderPhotos();
-          captionDiv.appendChild(input); captionDiv.appendChild(save); captionDiv.appendChild(cancel);
-        };
+        const actions = document.createElement('div'); actions.className='photo-actions';
+        const del = document.createElement('button'); del.className='btn ghost'; del.textContent='删除';
+        del.onclick = ()=>{ if(confirm('确认删除这张上传的照片吗？')){ storedPhotos.splice(idx,1); savePhotos(); renderPhotos(); } };
+        actions.appendChild(del);
+        card.appendChild(actions);
 
-        const delBtn = document.createElement("button"); delBtn.className="small-btn"; delBtn.textContent="删除";
-        delBtn.onclick = () => {
-          if(confirm("确认删除这张上传的照片吗？")){
-            storedPhotos.splice(idx,1);
-            localStorage.setItem("photos", JSON.stringify(storedPhotos));
-            renderPhotos();
-          }
-        };
-
-        btnRow.appendChild(editBtn); btnRow.appendChild(delBtn);
-        card.appendChild(captionDiv);
-        card.appendChild(btnRow);
         gallery.appendChild(card);
       });
+    }
+
+    function savePhotos(){ localStorage.setItem('photos', JSON.stringify(storedPhotos)); }
+
+    function editCaption(idx){
+      const text = prompt('编辑描述：', storedPhotos[idx].caption || photoQuotes[idx % photoQuotes.length]);
+      if(text !== null){
+        storedPhotos[idx].caption = text.trim();
+        savePhotos(); renderPhotos();
+      }
     }
 
     // 上传
-    document.getElementById("photoUpload").addEventListener("change", (e)=>{
+    document.getElementById('photoUpload').addEventListener('change', e=>{
       const file = e.target.files && e.target.files[0];
       if(!file) return;
       const reader = new FileReader();
-      reader.onload = () => {
-        storedPhotos.push({src:reader.result, caption:""});
-        localStorage.setItem("photos", JSON.stringify(storedPhotos));
-        renderPhotos();
+      reader.onload = ()=> {
+        storedPhotos.push({ src: reader.result, caption: '' });
+        savePhotos(); renderPhotos();
       };
       reader.readAsDataURL(file);
-      e.target.value = "";
+      e.target.value = '';
+    });
+
+    // add from URL (quick)
+    document.getElementById('addFromUrl').addEventListener('click', ()=>{
+      const url = prompt('输入图片 URL：');
+      if(url) {
+        storedPhotos.push({src:url.trim(), caption:''});
+        savePhotos(); renderPhotos();
+      }
     });
 
     renderPhotos();
 
-    /* ---------- 恋爱清单（保留原始五项，支持完成、完成日期、编辑、删除） ---------- */
-    const loveListEl = document.getElementById("loveList");
+    /* ---------- lightbox ---------- */
+    const lb = document.getElementById('lightbox');
+    function openLightbox(src, caption){
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxCaption').textContent = caption || '';
+      lb.style.display = 'flex';
+    }
+    function closeLightbox(e){
+      if(!e || e.target === lb || e.target.classList.contains('ghost')) lb.style.display='none';
+    }
+    function copyCaption(){
+      const text = document.getElementById('lightboxCaption').textContent || '';
+      if(!text) return alert('没有描述可复制');
+      navigator.clipboard.writeText(text).then(()=> alert('文本已复制到剪贴板'));
+    }
+
+    /* ---------- 恋爱清单（保留原始五项，支持完成、编辑、删除、进度） ---------- */
+    const loveListEl = document.getElementById('loveList');
     const defaultItems = [
       {text:"一起去看海 🌊", done:false, date:null},
       {text:"一起做饭 🍳", done:false, date:null},
@@ -227,74 +364,70 @@
       {text:"一起写一封情书 💌", done:false, date:null},
       {text:"一起看一场日落 🌅", done:false, date:null}
     ];
-    const loaded = JSON.parse(localStorage.getItem("loveItems"));
+    const loaded = JSON.parse(localStorage.getItem('loveItems'));
     let loveItems = (Array.isArray(loaded) && loaded.length>0) ? loaded : defaultItems.slice();
 
-    function saveLove(){
-      localStorage.setItem("loveItems", JSON.stringify(loveItems));
+    function saveLove(){ localStorage.setItem('loveItems', JSON.stringify(loveItems)); updateProgress(); }
+
+    function updateProgress(){
+      const done = loveItems.filter(i=>i.done).length;
+      const total = Math.max(1,loveItems.length);
+      const pct = Math.round((done/total)*100);
+      document.getElementById('progressInner').style.width = pct + '%';
+      document.getElementById('progressInner').title = `已完成 ${done}/${total} 项`;
     }
 
     function renderList(){
-      loveListEl.innerHTML = "";
-      loveItems.forEach((item, idx) => {
-        const li = document.createElement("li");
-        const left = document.createElement("div"); left.style.display="flex"; left.style.alignItems="center"; left.style.gap="8px"; left.style.flex="1";
-        // checkbox
-        const cb = document.createElement("input"); cb.type="checkbox"; cb.checked = !!item.done;
-        cb.onchange = () => {
-          item.done = cb.checked;
-          item.date = item.done ? new Date().toLocaleDateString() : null;
+      loveListEl.innerHTML = '';
+      loveItems.forEach((it, idx)=>{
+        const li = document.createElement('li'); li.className='love-item';
+        const left = document.createElement('div'); left.className='item-left';
+        const cb = document.createElement('input'); cb.type='checkbox'; cb.checked = !!it.done;
+        cb.onchange = ()=>{
+          it.done = cb.checked;
+          it.date = it.done ? new Date().toLocaleDateString() : null;
           saveLove(); renderList();
         };
         left.appendChild(cb);
-        // text / completed style
-        const span = document.createElement("span"); span.textContent = item.text; span.style.flex="1";
-        if(item.done) span.className = "completed";
+        const span = document.createElement('div'); span.className='text'; span.textContent = it.text;
+        if(it.done) span.style.textDecoration = 'line-through';
         left.appendChild(span);
 
         li.appendChild(left);
 
-        // right buttons: edit, delete, show date
-        const right = document.createElement("div"); right.style.display="flex"; right.style.gap="8px"; right.style.alignItems="center";
-        if(item.date){
-          const d = document.createElement("div"); d.style.fontSize="12px"; d.style.color="#888"; d.textContent = item.date; right.appendChild(d);
-        }
-        const editBtn = document.createElement("button"); editBtn.className="small-btn"; editBtn.textContent="编辑";
-        editBtn.onclick = () => {
-          // replace span with input + save/cancel
-          const input = document.createElement("input"); input.className="edit-input"; input.value = item.text;
-          left.replaceChild(input, span);
-          editBtn.style.display = "none";
-          const save = document.createElement("button"); save.className="small-btn"; save.textContent="保存";
-          const cancel = document.createElement("button"); cancel.className="small-btn"; cancel.textContent="取消";
-          save.onclick = () => {
-            const v = input.value.trim(); if(!v) return alert("内容不能为空");
-            item.text = v; saveLove(); renderList();
-          };
-          cancel.onclick = () => renderList();
-          right.insertBefore(save, editBtn);
-          right.insertBefore(cancel, editBtn);
-        };
+        const right = document.createElement('div');
+        right.style.display='flex'; right.style.gap='8px'; right.style.alignItems='center';
 
-        const delBtn = document.createElement("button"); delBtn.className="small-btn"; delBtn.textContent="删除";
-        delBtn.onclick = () => {
-          if(confirm("确认删除这项吗？")){
-            loveItems.splice(idx,1); saveLove(); renderList();
+        if(it.date){
+          const d = document.createElement('div'); d.className='small'; d.textContent = it.date; right.appendChild(d);
+        }
+
+        const edit = document.createElement('button'); edit.className='btn ghost'; edit.textContent='编辑';
+        edit.onclick = ()=>{
+          const v = prompt('编辑清单项：', it.text);
+          if(v !== null){
+            it.text = v.trim() || it.text;
+            saveLove(); renderList();
           }
         };
+        const del = document.createElement('button'); del.className='btn ghost'; del.textContent='删除';
+        del.onclick = ()=>{
+          if(confirm('确认删除这项吗？')){ loveItems.splice(idx,1); saveLove(); renderList(); }
+        };
 
-        right.appendChild(editBtn); right.appendChild(delBtn);
+        right.appendChild(edit); right.appendChild(del);
         li.appendChild(right);
         loveListEl.appendChild(li);
       });
+      updateProgress();
     }
 
     function addItem(){
-      const input = document.getElementById("newItem");
+      const input = document.getElementById('newItem');
       const v = input.value.trim();
       if(!v) return;
       loveItems.push({text:v,done:false,date:null});
-      saveLove(); input.value=""; renderList();
+      input.value=''; saveLove(); renderList();
     }
 
     renderList();
