@@ -38,27 +38,52 @@
     }
 
     .back-button {
-      margin: 20px;
-      padding: 10px 20px;
+      margin: 30px;
+      padding: 12px 24px;
       font-size: 1em;
-      border-radius: 20px;
+      border-radius: 25px;
       background: linear-gradient(to right, #ff69b4, #ffb6c1);
       color: white;
       border: none;
       cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
     }
 
     @media screen and (max-width: 600px) {
-      h1 { font-size: 1.8em; margin-top: 20px; }
-      .photo-gallery img { width: 100%; max-width: 280px; }
-      .back-button { width: 90%; font-size: 1em; padding: 12px; }
+      h1 {
+        font-size: 1.8em;
+        margin-top: 20px;
+      }
+
+      .photo-gallery img {
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .back-button {
+        width: 90%;
+        font-size: 1em;
+        padding: 12px;
+      }
     }
   </style>
 </head>
 <body>
   <h1>恋爱相册</h1>
+
   <div class="photo-gallery">
     <img src="images/photo1.jpg" alt="甜蜜回忆1">
     <img src="images/photo2.jpg" alt="甜蜜回忆2">
     <img src="images/photo3.jpg" alt="甜蜜回忆3">
-    <img src="images
+    <img src="images/photo4.jpg" alt="甜蜜回忆4">
+    <img src="images/photo5.jpg" alt="甜蜜回忆5">
+    <img src="images/photo6.jpg" alt="甜蜜回忆6">
+    <img src="images/photo7.jpg" alt="甜蜜回忆7">
+    <img src="images/photo8.jpg" alt="甜蜜回忆8">
+    <img src="images/photo9.jpg" alt="甜蜜回忆9">
+    <img src="images/photo10.jpg" alt="甜蜜回忆10">
+  </div>
+
+  <button class="back-button" onclick="location.href='index.html'">返回主页</button>
+</body>
+</html>
