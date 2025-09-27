@@ -36,6 +36,7 @@
       border-left: 5px solid #ff69b4;
       border-radius: 10px;
       text-align: left;
+      position: relative;
     }
     .message-card p {
       margin: 0;
@@ -47,6 +48,21 @@
       margin-top: 8px;
       font-size: 0.9em;
       color: #888;
+    }
+    .delete-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #ff6b81;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 16px;
+      cursor: pointer;
+      line-height: 24px;
+      text-align: center;
     }
     .input-area {
       margin-top: 30px;
@@ -104,15 +120,32 @@
   <button class="back-button" onclick="location.href='index.html'">返回主页</button>
 
   <script>
-    // 加载已保存的留言
+    const defaultMessages = [
+      "对象，我想运动了。",
+      "对象，我们要一直运动。",
+      "对象，其实你惹我生气，我会躲在角落等你来找我的，不会离开的。",
+      "对象，我想和你就那样裸着，抱着没有未来没有过去，一直到永远。",
+      "对象，我就喜欢在你怀里，要经常抱着我亲我。"
+    ];
+
+    // 初始化留言
     window.onload = function() {
-      const saved = localStorage.getItem("loveMessages");
-      if (saved) {
-        const messages = JSON.parse(saved);
-        messages.reverse().forEach(msg => {
-          insertMessage(msg.text, msg.date);
-        });
+      let messages = JSON.parse(localStorage.getItem("loveMessages") || "[]");
+
+      // 如果是第一次访问，插入默认留言
+      if (messages.length === 0) {
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+        messages = defaultMessages.map((text, i) => ({
+          text: text,
+          date: `${dateStr} · 初始留言 ${i+1}`
+        }));
+        localStorage.setItem("loveMessages", JSON.stringify(messages));
       }
+
+      messages.reverse().forEach((msg, index) => {
+        insertMessage(msg.text, msg.date, index);
+      });
     };
 
     function addMessage() {
@@ -122,25 +155,31 @@
       const now = new Date();
       const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-      insertMessage(text, dateStr);
-      saveMessage(text, dateStr);
+      let messages = JSON.parse(localStorage.getItem("loveMessages") || "[]");
+      messages.push({ text, date: dateStr });
+      localStorage.setItem("loveMessages", JSON.stringify(messages));
 
+      insertMessage(text, dateStr, messages.length - 1);
       document.getElementById("new-message").value = "";
     }
 
-    function insertMessage(text, dateStr) {
+    function insertMessage(text, dateStr, index) {
       const card = document.createElement("div");
       card.className = "message-card";
-      card.innerHTML = `<p>${text}</p><span class="date">铭津 · ${dateStr}</span>`;
+      card.innerHTML = `
+        <p>${text}</p>
+        <span class="date">铭津 · ${dateStr}</span>
+        <button class="delete-button" onclick="deleteMessage(${index})">×</button>
+      `;
       const list = document.getElementById("message-list");
       list.insertBefore(card, list.firstChild);
     }
 
-    function saveMessage(text, dateStr) {
-      const saved = localStorage.getItem("loveMessages");
-      const messages = saved ? JSON.parse(saved) : [];
-      messages.push({ text, date: dateStr });
+    function deleteMessage(index) {
+      let messages = JSON.parse(localStorage.getItem("loveMessages") || "[]");
+      messages.splice(index, 1);
       localStorage.setItem("loveMessages", JSON.stringify(messages));
+      location.reload();
     }
   </script>
 </body>
