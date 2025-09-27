@@ -1,186 +1,166 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>想说的话 · 铭津 ❤️ 玉薪</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>想对对方说的话</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #fffafc, #ffe4e1);
-      text-align: center;
+      background: linear-gradient(to bottom right, #ffe4e1, #ffc0cb);
     }
-    h1 {
-      margin-top: 40px;
-      font-size: 2.2em;
-      color: #d6336c;
-    }
-    .love-words {
-      margin: 30px auto;
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
       padding: 20px;
-      max-width: 700px;
-      background: #fffafc;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
     }
-    .love-words h2 {
-      font-size: 1.6em;
-      color: #d6336c;
+
+    .header {
+      text-align: center;
       margin-bottom: 20px;
     }
-    .message-card {
-      background: #ffe4e1;
-      padding: 16px;
-      margin-bottom: 15px;
-      border-left: 5px solid #ff69b4;
-      border-radius: 10px;
-      text-align: left;
-      position: relative;
-    }
-    .message-card p {
-      margin: 0;
-      font-size: 1.1em;
+
+    .header h1 {
+      font-size: 2.2em;
       color: #d6336c;
+      margin: 0;
     }
-    .message-card .date {
-      display: block;
-      margin-top: 8px;
-      font-size: 0.9em;
-      color: #888;
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
-    .delete-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #ff6b81;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      font-size: 16px;
-      cursor: pointer;
-      line-height: 24px;
-      text-align: center;
-    }
-    .input-area {
-      margin-top: 30px;
-    }
+
     textarea {
-      width: 90%;
-      max-width: 600px;
-      height: 100px;
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 10px;
-      border: 1px solid #ffb6c1;
-      resize: none;
+      width: 100%;
+      height: 120px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      box-sizing: border-box;
     }
-    .submit-button {
+
+    .save-btn {
       margin-top: 10px;
       padding: 10px 20px;
-      font-size: 1em;
-      border-radius: 20px;
-      background: linear-gradient(to right, #ff69b4, #ffb6c1);
+      background-color: #d6336c;
       color: white;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+      font-size: 16px;
     }
-    .back-button {
-      margin: 30px;
-      padding: 12px 24px;
-      font-size: 1em;
-      border-radius: 25px;
-      background: linear-gradient(to right, #ff69b4, #ffb6c1);
-      color: white;
+
+    .note {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+    }
+
+    .message {
+      background: #fff0f5;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .message .meta {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .like-btn {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      background: none;
       border: none;
+      color: #d6336c;
       cursor: pointer;
-      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+      font-size: 16px;
+    }
+
+    .like-btn:hover {
+      color: #ff3366;
     }
   </style>
 </head>
 <body>
-  <h1>铭津 ❤️ 玉薪</h1>
-
-  <section class="love-words">
-    <h2>想说的话 💬</h2>
-
-    <div id="message-list">
-      <!-- 留言将自动插入这里 -->
+  <div class="container">
+    <div class="header">
+      <h1>想对对方说的话</h1>
     </div>
 
-    <div class="input-area">
-      <textarea id="new-message" placeholder="写下你想对玉薪说的话吧..."></textarea><br>
-      <button class="submit-button" onclick="addMessage()">发布留言</button>
+    <!-- 原有五条留言（静态展示） -->
+    <div class="card">
+      <h2>我们的留言</h2>
+      <p>对象，我想运动了。</p>
+      <p>对象，我们要一直运动。</p>
+      <p>对象，其实你惹我生气，我会躲在角落等你来找我的，不会离开的。</p>
+      <p>对象，我想和你就那样裸着，抱着没有未来没有过去，一直到永远。</p>
+      <p>对象，我就喜欢在你怀里，要经常抱着我亲我。</p>
     </div>
-  </section>
 
-  <button class="back-button" onclick="location.href='index.html'">返回主页</button>
+    <!-- 新留言输入区 -->
+    <div class="card">
+      <textarea id="messageInput" placeholder="写下你想说的话..."></textarea>
+      <button class="save-btn" onclick="addMessage()">发送留言</button>
+      <div class="note">你和玉薪都可以留言，每条都可以被点赞。</div>
+    </div>
+
+    <!-- 新留言展示区 -->
+    <div class="card" id="messageList">
+      <!-- 留言将显示在这里 -->
+    </div>
+  </div>
 
   <script>
-    const defaultMessages = [
-      "对象，我想运动了。",
-      "对象，我们要一直运动。",
-      "对象，其实你惹我生气，我会躲在角落等你来找我的，不会离开的。",
-      "对象，我想和你就那样裸着，抱着没有未来没有过去，一直到永远。",
-      "对象，我就喜欢在你怀里，要经常抱着我亲我。"
-    ];
+    let messages = JSON.parse(localStorage.getItem("loveMessages")) || [];
 
-    // 初始化留言
-    window.onload = function() {
-      let messages = JSON.parse(localStorage.getItem("loveMessages") || "[]");
-
-      // 如果是第一次访问，插入默认留言
-      if (messages.length === 0) {
-        const now = new Date();
-        const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
-        messages = defaultMessages.map((text, i) => ({
-          text: text,
-          date: `${dateStr} · 初始留言 ${i+1}`
-        }));
-        localStorage.setItem("loveMessages", JSON.stringify(messages));
-      }
-
-      messages.reverse().forEach((msg, index) => {
-        insertMessage(msg.text, msg.date, index);
+    function renderMessages() {
+      const list = document.getElementById("messageList");
+      list.innerHTML = "";
+      messages.forEach((msg, index) => {
+        const div = document.createElement("div");
+        div.className = "message";
+        div.innerHTML = `
+          <div class="meta">${msg.name} · ${msg.time}</div>
+          <div>${msg.text}</div>
+          <button class="like-btn" onclick="likeMessage(${index})">❤️ ${msg.likes}</button>
+        `;
+        list.appendChild(div);
       });
-    };
+    }
 
     function addMessage() {
-      const text = document.getElementById("new-message").value.trim();
-      if (text === "") return;
-
-      const now = new Date();
-      const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-      let messages = JSON.parse(localStorage.getItem("loveMessages") || "[]");
-      messages.push({ text, date: dateStr });
+      const text = document.getElementById("messageInput").value.trim();
+      if (!text) return alert("留言不能为空！");
+      const name = prompt("你的名字（铭津或玉薪）");
+      if (!name) return;
+      const time = new Date().toLocaleString();
+      messages.push({ name, text, time, likes: 0 });
       localStorage.setItem("loveMessages", JSON.stringify(messages));
-
-      insertMessage(text, dateStr, messages.length - 1);
-      document.getElementById("new-message").value = "";
+      document.getElementById("messageInput").value = "";
+      renderMessages();
     }
 
-    function insertMessage(text, dateStr, index) {
-      const card = document.createElement("div");
-      card.className = "message-card";
-      card.innerHTML = `
-        <p>${text}</p>
-        <span class="date">铭津 · ${dateStr}</span>
-        <button class="delete-button" onclick="deleteMessage(${index})">×</button>
-      `;
-      const list = document.getElementById("message-list");
-      list.insertBefore(card, list.firstChild);
-    }
-
-    function deleteMessage(index) {
-      let messages = JSON.parse(localStorage.getItem("loveMessages") || "[]");
-      messages.splice(index, 1);
+    function likeMessage(index) {
+      messages[index].likes++;
       localStorage.setItem("loveMessages", JSON.stringify(messages));
-      location.reload();
+      renderMessages();
     }
+
+    window.onload = renderMessages;
   </script>
 </body>
 </html>
