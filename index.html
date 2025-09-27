@@ -1,89 +1,125 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <title>铭津 ❤️ 玉薪</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>铭津 ♥ 玉薪</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #fffafc, #ffe4e1);
-      text-align: center;
+      background: linear-gradient(to bottom right, #ffe4e1, #ffc0cb);
+      overflow-x: hidden;
     }
-    h1 {
-      margin-top: 40px;
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
       font-size: 2.5em;
       color: #d6336c;
+      margin: 0;
     }
-    #love-days {
-      font-size: 1.4em;
+
+    .quote {
+      text-align: center;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin-top: 0;
       color: #d6336c;
-      margin-top: 12px;
     }
-    .nav-buttons {
-      margin-top: 40px;
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .nav-buttons a {
-      text-decoration: none;
-      padding: 14px 28px;
-      border-radius: 30px;
-      background: linear-gradient(to right, #ff69b4, #ffb6c1);
+
+    .link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #d6336c;
       color: white;
-      font-size: 1.1em;
-      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
-      transition: transform 0.3s;
+      border-radius: 8px;
+      text-decoration: none;
     }
-    .nav-buttons a:hover {
-      transform: scale(1.05);
+
+    .floating-text {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 14px;
+      color: #d6336c;
+      animation: floatUp 6s infinite;
     }
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-        margin-top: 30px;
-      }
-      #love-days {
-        font-size: 1.2em;
-      }
-      .nav-buttons a {
-        width: 80%;
-        font-size: 1em;
-        padding: 12px;
-      }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100px); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <h1>铭津 ❤️ 玉薪</h1>
-  <div id="love-days"></div>
+  <div class="container">
+    <div class="header">
+      <h1>铭津 ♥ 玉薪</h1>
+    </div>
 
-  <div class="nav-buttons">
-    <a href="photo.html">恋爱相册</a>
-    <a href="story.html">我们的故事</a>
-    <a href="milestones.html">甜蜜时刻</a>
-    <a href="words.html">想说的话</a>
+    <div class="quote" id="dailyQuote">“你是我心中最柔软的光。”</div>
+
+    <div class="card">
+      <h2>我们的纪念日</h2>
+      <p>我们已经一起走过 <span id="daysTogether">...</span> 天。</p>
+    </div>
+
+    <div class="card">
+      <h2>留言墙</h2>
+      <p>写下你对玉薪的心里话，留下爱的痕迹。</p>
+      <a class="link" href="words.html">进入留言墙</a>
+    </div>
+
+    <div class="card">
+      <h2>照片回忆</h2>
+      <p>每一张照片，都是我们爱的见证。</p>
+      <a class="link" href="photo.html">查看照片</a>
+    </div>
   </div>
 
+  <div class="floating-text">铭津 ♥ 玉薪</div>
+
   <script>
-    // 设置你们在一起的起始日期（格式：YYYY-MM-DD）
-    const startDate = new Date("2025-03-15"); // 修改为你们的纪念日
-
-    // 获取今天的日期（去除时间部分）
+    // 纪念日计数
+    const startDate = new Date("2023-01-01"); // 你们的纪念日
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // 计算相差的毫秒数
     const diffTime = today - startDate;
-
-    // 转换为天数
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById("daysTogether").textContent = diffDays;
 
-    // 显示在页面上
-    document.getElementById("love-days").innerText = `今天是我们在一起的第 ${diffDays} 天 ❤️`;
+    // 每日情话
+    const quotes = [
+      "你是我心中最柔软的光。",
+      "每一天醒来，最想见的人是你。",
+      "爱你，是我最坚定的选择。",
+      "你笑的样子，是我最爱的风景。",
+      "世界很大，但我只想和你一起走。"
+    ];
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById("dailyQuote").textContent = `“${randomQuote}”`;
   </script>
 </body>
 </html>
