@@ -48,6 +48,30 @@
       font-size: 0.9em;
       color: #888;
     }
+    .input-area {
+      margin-top: 30px;
+    }
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      height: 100px;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 10px;
+      border: 1px solid #ffb6c1;
+      resize: none;
+    }
+    .submit-button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 20px;
+      background: linear-gradient(to right, #ff69b4, #ffb6c1);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
+    }
     .back-button {
       margin: 30px;
       padding: 12px 24px;
@@ -59,23 +83,6 @@
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(255, 105, 180, 0.3);
     }
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 1.8em;
-        margin-top: 30px;
-      }
-      .love-words {
-        padding: 15px;
-      }
-      .message-card p {
-        font-size: 1em;
-      }
-      .back-button {
-        width: 90%;
-        font-size: 1em;
-        padding: 12px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -84,32 +91,35 @@
   <section class="love-words">
     <h2>想说的话 💬</h2>
 
-    <div class="message-card">
-      <p>对象，我想运动了。</p>
-      <span class="date">铭津 · 留言 ①</span>
+    <div id="message-list">
+      <!-- 留言将自动插入这里 -->
     </div>
 
-    <div class="message-card">
-      <p>对象，我们要一直运动。</p>
-      <span class="date">铭津 · 留言 ②</span>
-    </div>
-
-    <div class="message-card">
-      <p>对象，其实你惹我生气，我会躲在角落等你来找我的，不会离开的。</p>
-      <span class="date">铭津 · 留言 ③</span>
-    </div>
-
-    <div class="message-card">
-      <p>对象，我想和你就那样裸着，抱着没有未来没有过去，一直到永远。</p>
-      <span class="date">铭津 · 留言 ④</span>
-    </div>
-
-    <div class="message-card">
-      <p>对象，我就喜欢在你怀里，要经常抱着我亲我。</p>
-      <span class="date">铭津 · 留言 ⑤</span>
+    <div class="input-area">
+      <textarea id="new-message" placeholder="写下你想对玉薪说的话吧..."></textarea><br>
+      <button class="submit-button" onclick="addMessage()">发布留言</button>
     </div>
   </section>
 
   <button class="back-button" onclick="location.href='index.html'">返回主页</button>
+
+  <script>
+    function addMessage() {
+      const text = document.getElementById("new-message").value.trim();
+      if (text === "") return;
+
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const card = document.createElement("div");
+      card.className = "message-card";
+      card.innerHTML = `<p>${text}</p><span class="date">铭津 · ${dateStr}</span>`;
+
+      const list = document.getElementById("message-list");
+      list.insertBefore(card, list.firstChild); // 最新留言放最上面
+
+      document.getElementById("new-message").value = "";
+    }
+  </script>
 </body>
 </html>
