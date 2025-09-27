@@ -23,8 +23,7 @@
 
     .site{ width:100%; max-width:var(--max-width); margin:0 auto; }
 
-    header.top{
-      display:flex; gap:16px; align-items:center; margin-bottom:16px; padding:14px; border-radius:18px;
+    header.top{ display:flex; gap:16px; align-items:center; margin-bottom:16px; padding:14px; border-radius:18px;
       background: linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.12));
       box-shadow: var(--shadow); backdrop-filter: blur(6px);
     }
@@ -34,57 +33,41 @@
     .title{ display:flex; flex-direction:column; min-width:0; }
     .title h1{ margin:0; font-family:'Great Vibes', cursive; font-size:30px; color:var(--accent); line-height:1 }
     .title p{ margin:4px 0 0; font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
     .controls{ text-align:right; min-width:160px; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
     .enter-btn{ background:var(--accent); color:#fff; border:none; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:600; box-shadow:0 6px 16px rgba(214,51,108,0.12); }
     .enter-btn.secondary{ background:transparent; color:var(--accent); border:1px solid rgba(214,51,108,0.12); padding:7px 12px; }
-
     .quote-box{ text-align:center; margin-bottom:14px; font-style:italic; color:#444; background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.35)); padding:12px 14px; border-radius:12px; box-shadow:var(--shadow); }
-
     .grid{ display:grid; grid-template-columns:1fr 380px; gap:var(--gap); align-items:start; }
     @media (max-width:980px){ .grid{ grid-template-columns:1fr } }
-
     .left-col{ display:flex; flex-direction:column; gap:12px; }
     .card{ background:var(--card-bg); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); transition:transform .18s ease, box-shadow .18s ease; }
     .card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.08) }
     .card h2{ margin:0 0 8px 0; color:var(--accent) }
     .muted{ color:var(--muted); font-size:13px }
-
     .btn{ background:var(--accent); color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-size:14px; }
     .btn.ghost{ background:transparent; color:var(--accent); border:1px solid rgba(214,51,108,0.12) }
-
-    /* gallery (only for manager modal) */
     .gallery{ display:grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap:10px; margin-top:10px; }
     .photo-card{ border-radius:12px; overflow:hidden; background:#fff; display:flex; flex-direction:column; justify-content:flex-start; align-items:center; padding:8px; }
     .photo-card img{ width:100%; height:120px; object-fit:cover; border-radius:8px; cursor:zoom-in; }
     .photo-card .caption{ font-size:13px; color:#666; padding:8px 6px; text-align:center; min-height:44px; }
-
     .right-col{ display:flex; flex-direction:column; gap:12px; }
     .sticky{ position:sticky; top:18px; }
-
     #progressBar{ height:12px; background: linear-gradient(90deg,#ffe6ef,#ffd8e6); border-radius:8px; overflow:hidden; margin:10px 0; }
     #progressInner{ height:100%; background: linear-gradient(90deg,#ff8bb0,#d6336c); width:0%; transition:width .6s ease; }
-
     .love-list ul{ margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
     .love-item{ display:flex; gap:8px; align-items:center; justify-content:space-between; padding:8px; border-radius:10px; background:rgba(255,255,255,0.88) }
     .item-left{ display:flex; gap:8px; align-items:center; flex:1 }
     .item-left input[type="checkbox"]{ transform:scale(1.12) }
     .item-left .text{ font-size:15px }
     .small{ font-size:12px; color:#777 }
-
-    /* modal manager */
     #photoManager{ display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; padding:20px; }
     #photoManager .panel{ width:100%; max-width:980px; background:#fff; border-radius:12px; padding:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); max-height:90vh; overflow:auto; }
     .manager-top{ display:flex; gap:10px; align-items:center; margin-bottom:8px; }
     .manager-top input[type="file"]{ flex:1 }
-
-    /* lightbox */
     #lightbox{ display:none; position:fixed; inset:0; background: rgba(0,0,0,0.85); z-index:10000; align-items:center; justify-content:center; padding:20px; }
     #lightbox .inner{ max-width:960px; width:100%; }
     #lightbox img{ width:100%; height:auto; border-radius:12px; max-height:80vh; object-fit:contain; }
     #lightbox .caption{ margin-top:8px; color:#fff; text-align:center }
-
-    /* responsive tweaks for small screens */
     @media (max-width:600px){
       body{ padding:12px; }
       header.top{ flex-direction:column; align-items:flex-start; gap:10px; padding:12px; border-radius:12px; }
@@ -98,7 +81,6 @@
       .gallery{ grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap:8px; }
       .btn{ padding:10px 12px; font-size:15px; border-radius:10px; }
       input[type="text"], input[type="file"]{ padding:10px; font-size:15px; }
-      /* modal full screen on mobile */
       #photoManager .panel{ width:100%; height:100vh; max-width:100%; border-radius:10px; padding:14px; max-height:none; }
       #lightbox .inner{ height:100vh; display:flex; flex-direction:column; justify-content:center; }
       #lightbox img{ max-height:70vh; }
@@ -107,7 +89,6 @@
       .enter-btn{ padding:10px 16px; }
       .right-col .card.sticky{ position:static; }
     }
-
     footer{ margin-top:12px; text-align:center; color:var(--muted); font-size:13px }
     .hidden{ display:none !important; }
   </style>
@@ -235,7 +216,7 @@
         const card = document.createElement('div'); card.className='photo-card';
         const img = document.createElement('img'); img.src = p.src; img.alt = p.src;
         img.onerror = ()=>{ img.src = 'https://via.placeholder.com/400x300?text=photo'; };
-        img.onclick = ()=> openLightbox(p.src, p.caption || '');
+        img.onclick = () => openLightbox(p.src, p.caption || '');
         card.appendChild(img);
         const cap = document.createElement('div'); cap.className='caption'; cap.textContent = p.caption || '仓库图片';
         card.appendChild(cap);
@@ -302,12 +283,15 @@
     function openLightbox(src, caption){
       document.getElementById('lightboxImg').src = src;
       document.getElementById('lightboxCaption').textContent = caption || '';
-      lb.classList.remove('hidden'); lb.style.display='flex';
-      document.body.style.overflow='hidden';
+      lb.classList.remove('hidden');
+      lb.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
     function closeLightbox(e){
       if(!e || e.target === lb || e.target.classList.contains('ghost')) {
-        lb.style.display='none'; lb.classList.add('hidden'); document.body.style.overflow='';
+        lb.style.display = 'none';
+        lb.classList.add('hidden');
+        document.body.style.overflow = '';
       }
     }
     function copyCaption(){
