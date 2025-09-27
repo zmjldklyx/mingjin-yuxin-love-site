@@ -35,7 +35,6 @@
     .title p{ margin:4px 0 0; font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .controls{ text-align:right; min-width:160px; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
     .enter-btn{ background:var(--accent); color:#fff; border:none; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:600; box-shadow:0 6px 16px rgba(214,51,108,0.12); }
-    .enter-btn.secondary{ background:transparent; color:var(--accent); border:1px solid rgba(214,51,108,0.12); padding:7px 12px; }
     .quote-box{ text-align:center; margin-bottom:14px; font-style:italic; color:#444; background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.35)); padding:12px 14px; border-radius:12px; box-shadow:var(--shadow); }
     .grid{ display:grid; grid-template-columns:1fr 380px; gap:var(--gap); align-items:start; }
     @media (max-width:980px){ .grid{ grid-template-columns:1fr } }
@@ -126,7 +125,6 @@
           <div style="margin-top:10px;">
             <button class="btn" onclick="openPhotoManager()">查看照片回忆</button>
           </div>
-          <p class="small muted" style="margin-top:10px;">提示：本地上传的照片保存在浏览器 localStorage；仓库中名为 photo1.jpg—photo10.jpg 的预设图片也会在管理窗口中显示（若存在）</p>
         </div>
 
         <div class="card">
@@ -170,8 +168,6 @@
         </div>
       </div>
 
-      <div id="pmNotice" class="muted">管理窗口：仓库预设图片 photo1.jpg～photo10.jpg（若存在）在前，上传图片在后。</div>
-
       <div class="gallery" id="pmGallery" aria-live="polite"></div>
     </div>
   </div>
@@ -189,215 +185,50 @@
   </div>
 
   <script>
-    // 纪念日与随机情话
+    /* 纪念日与每日情话 */
     const startDate = new Date("2025-03-15");
     function updateDays(){ const today = new Date(); const diff = Math.floor((today - startDate)/(1000*60*60*24)); document.getElementById('daysTogether').textContent = diff; }
     updateDays();
     const quotes = ["你的笑容，是我最爱的风景。","和你在一起的每一天，都是节日。","爱你，是我最坚定的选择。","世界很大，但我只想和你一起走。","你是我心中最柔软的光。"];
     document.getElementById('dailyQuote').textContent = `“${quotes[Math.floor(Math.random()*quotes.length)]}”`;
-    function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
 
-    /***** 照片管理与灯箱（已修复：openPhotoManager/closePhotoManager 会设置 display） *****/
-    (function(){
-      // 元素
-      const pm = document.getElementById('photoManager');
-      const pmGallery = document.getElementById('pmGallery');
-      const pmUpload = document.getElementById('pmUpload');
-      const pmAddUrl = document.getElementById('pmAddUrl');
-      const pmClose = document.getElementById('pmClose');
-      const lightbox = document.getElementById('lightbox');
-      const lightboxImg = document.getElementById('lightboxImg');
-      const lightboxCaption = document.getElementById('lightboxCaption');
+    /* 照片管理（仅显示用户上传的照片） */
+    const pm = document.getElementById('photoManager');
+    const pmGallery = document.getElementById('pmGallery');
+    let storedPhotos = JSON.parse(localStorage.getItem('photos')) || [];
+    const photoQuotes = ["你的笑容，让春天提前到来。","和你牵手，走过每一条街。","愿时间温柔以待我们的小日子。","你的名字，是我最温柔的念想。","每天都想把世界的好给你看。"];
 
-      // 数据：localStorage 中保存的上传图片数组 [{src, caption}]
-      let storedPhotos = JSON.parse(localStorage.getItem('photos')) || [];
-
-      // 预设仓库图片（若路径不同，请调整前缀）
-      const presetPhotos = [];
-      for (let i = 1; i <= 10; i++) presetPhotos.push({ src: `photo${i}.jpg`, caption: '' });
-
-      // 默认描述情话（用于无描述时显示）
-      const photoQuotes = [
-        "你的笑容，让春天提前到来。",
-        "和你牵手，走过每一条街。",
-        "愿时间温柔以待我们的小日子。",
-        "你的名字，是我最温柔的念想。",
-        "每天都想把世界的好给你看。"
-      ];
-
-      // 打开照片管理器：确保 display 可见（flex），渲染内容，并锁定页面滚动
-      function openPhotoManager() {
-        if (!pm) return;
-        pm.classList.remove('hidden');
-        pm.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        renderPmGallery();
-      }
-
-      // 关闭照片管理器：隐藏并恢复滚动
-      function closePhotoManager() {
-        if (!pm) return;
-        pm.classList.add('hidden');
-        pm.style.display = 'none';
-        document.body.style.overflow = '';
-      }
-
-      // 渲染管理窗口的图库（预设在前，上传图片在后）
-      function renderPmGallery() {
-        if (!pmGallery) return;
-        pmGallery.innerHTML = '';
-
-        // 预设图片卡片（不可删除）
-        presetPhotos.forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'photo-card';
-
-          const img = document.createElement('img');
-          img.src = p.src;
-          img.alt = p.src;
-          img.onerror = () => { img.src = 'https://via.placeholder.com/400x300?text=photo'; };
-          img.onclick = () => openLightbox(p.src, p.caption || '');
-
-          const cap = document.createElement('div');
-          cap.className = 'caption';
-          cap.textContent = p.caption || '仓库图片';
-
-          card.appendChild(img);
-          card.appendChild(cap);
-          pmGallery.appendChild(card);
-        });
-
-        // 上传图片卡片（可编辑描述、删除、预览）
-        storedPhotos.forEach((obj, idx) => {
-          const card = document.createElement('div');
-          card.className = 'photo-card';
-
-          const img = document.createElement('img');
-          img.src = obj.src;
-          img.alt = `uploaded-${idx}`;
-          img.onclick = () => openLightbox(obj.src, obj.caption || photoQuotes[idx % photoQuotes.length]);
-
-          const caption = document.createElement('div');
-          caption.className = 'caption';
-          caption.textContent = obj.caption || photoQuotes[idx % photoQuotes.length];
-          caption.title = '点击编辑描述';
-          caption.style.cursor = 'pointer';
-          caption.onclick = () => editPmCaption(idx);
-
-          const actions = document.createElement('div');
-          actions.style.marginTop = '6px';
-
-          const del = document.createElement('button');
-          del.className = 'btn ghost';
-          del.textContent = '删除';
-          del.onclick = () => {
-            if (confirm('确认删除这张上传的照片吗？')) {
-              storedPhotos.splice(idx, 1);
-              savePhotos();
-              renderPmGallery();
-            }
-          };
-
-          actions.appendChild(del);
-
-          card.appendChild(img);
-          card.appendChild(caption);
-          card.appendChild(actions);
-          pmGallery.appendChild(card);
-        });
-      }
-
-      // 保存到 localStorage
-      function savePhotos() {
-        localStorage.setItem('photos', JSON.stringify(storedPhotos));
-      }
-
-      // 编辑描述
-      function editPmCaption(idx) {
-        const current = storedPhotos[idx] && storedPhotos[idx].caption ? storedPhotos[idx].caption : '';
-        const text = prompt('编辑描述：', current || photoQuotes[idx % photoQuotes.length]);
-        if (text !== null) {
-          storedPhotos[idx].caption = text.trim();
-          savePhotos();
-          renderPmGallery();
-        }
-      }
-
-      // 上传处理（FileReader -> dataURL）
-      if (pmUpload) {
-        pmUpload.addEventListener('change', (e) => {
-          const file = e.target.files && e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = () => {
-            storedPhotos.push({ src: reader.result, caption: '' });
-            savePhotos();
-            renderPmGallery();
-          };
-          reader.readAsDataURL(file);
-          e.target.value = '';
-        });
-      }
-
-      // 从 URL 添加
-      if (pmAddUrl) {
-        pmAddUrl.addEventListener('click', () => {
-          const url = prompt('输入图片 URL：');
-          if (url) {
-            storedPhotos.push({ src: url.trim(), caption: '' });
-            savePhotos();
-            renderPmGallery();
-          }
-        });
-      }
-
-      // 管理器关闭按钮
-      if (pmClose) pmClose.addEventListener('click', closePhotoManager);
-
-      // Lightbox: 打开
-      function openLightbox(src, caption) {
-        if (!lightbox) return;
-        lightboxImg.src = src;
-        lightboxCaption.textContent = caption || '';
-        lightbox.classList.remove('hidden');
-        lightbox.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      }
-
-      // Lightbox: 关闭（点击遮罩或调用时触发）
-      function closeLightbox(e) {
-        if (!lightbox) return;
-        if (!e || e.target === lightbox || (e.target && e.target.classList.contains('ghost'))) {
-          lightbox.style.display = 'none';
-          lightbox.classList.add('hidden');
-          document.body.style.overflow = '';
-        }
-      }
-
-      // 复制描述到剪贴板
-      function copyCaption() {
-        const text = lightboxCaption.textContent || '';
-        if (!text) return alert('没有描述可复制');
-        navigator.clipboard.writeText(text).then(() => alert('文本已复制到剪贴板'));
-      }
-
-      // 键盘 Esc：关闭模态或灯箱
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          if (pm && !pm.classList.contains('hidden')) closePhotoManager();
-          if (lightbox && !lightbox.classList.contains('hidden')) closeLightbox();
-        }
+    function openPhotoManager(){ pm.classList.remove('hidden'); pm.style.display='flex'; document.body.style.overflow='hidden'; renderPmGallery(); }
+    function closePhotoManager(){ pm.classList.add('hidden'); pm.style.display='none'; document.body.style.overflow=''; }
+    function renderPmGallery(){
+      pmGallery.innerHTML=''; 
+      storedPhotos.forEach((obj, idx)=>{
+        const card = document.createElement('div'); card.className='photo-card';
+        const img = document.createElement('img'); img.src = obj.src; img.onclick = ()=> openLightbox(obj.src, obj.caption || photoQuotes[idx % photoQuotes.length]);
+        card.appendChild(img);
+        const cap = document.createElement('div'); cap.className='caption'; cap.textContent = obj.caption || photoQuotes[idx % photoQuotes.length]; cap.onclick = ()=> editPmCaption(idx);
+        card.appendChild(cap);
+        const actions = document.createElement('div'); actions.style.marginTop='6px';
+        const del = document.createElement('button'); del.className='btn ghost'; del.textContent='删除';
+        del.onclick = ()=> { if(confirm('确认删除这张上传的照片吗？')){ storedPhotos.splice(idx,1); localStorage.setItem('photos', JSON.stringify(storedPhotos)); renderPmGallery(); } };
+        actions.appendChild(del); card.appendChild(actions);
+        pmGallery.appendChild(card);
       });
+    }
+    document.getElementById('pmUpload').addEventListener('change', (e)=> {
+      const file = e.target.files && e.target.files[0]; if(!file) return;
+      const reader = new FileReader(); reader.onload = ()=> { storedPhotos.push({src:reader.result, caption:''}); localStorage.setItem('photos', JSON.stringify(storedPhotos)); renderPmGallery(); };
+      reader.readAsDataURL(file); e.target.value='';
+    });
+    document.getElementById('pmAddUrl').addEventListener('click', ()=>{ const url = prompt('输入图片 URL：'); if(url){ storedPhotos.push({src:url.trim(), caption:''}); localStorage.setItem('photos', JSON.stringify(storedPhotos)); renderPmGallery(); } });
 
-      // 暴露少数方法到全局（供页面按钮调用）
-      window.openPhotoManager = openPhotoManager;
-      window.closePhotoManager = closePhotoManager;
-      window.openLightbox = openLightbox;
-      window.closeLightbox = closeLightbox;
-      window.copyCaption = copyCaption;
-    })();
+    /* 灯箱与复制描述 */
+    function openLightbox(src, caption){ document.getElementById('lightboxImg').src = src; document.getElementById('lightboxCaption').textContent = caption || ''; const lb = document.getElementById('lightbox'); lb.classList.remove('hidden'); lb.style.display='flex'; document.body.style.overflow='hidden'; }
+    function closeLightbox(e){ const lb = document.getElementById('lightbox'); if(!e || e.target === lb || (e.target && e.target.classList.contains('ghost'))){ lb.style.display='none'; lb.classList.add('hidden'); document.body.style.overflow=''; } }
+    function copyCaption(){ const text = document.getElementById('lightboxCaption').textContent || ''; if(!text) return alert('没有描述可复制'); navigator.clipboard.writeText(text).then(()=> alert('文本已复制到剪贴板')); }
+    function editPmCaption(idx){ const current = storedPhotos[idx] && storedPhotos[idx].caption ? storedPhotos[idx].caption : ''; const text = prompt('编辑描述：', current || photoQuotes[idx % photoQuotes.length]); if(text !== null){ storedPhotos[idx].caption = text.trim(); localStorage.setItem('photos', JSON.stringify(storedPhotos)); renderPmGallery(); } }
 
-    /***** 恋爱清单（保留原始五项，支持完成、编辑、删除、进度） *****/
+    /* 恋爱清单 */
     const loveListEl = document.getElementById('loveList');
     const defaultItems = [
       {text:"一起去看海 🌊", done:false, date:null},
@@ -408,71 +239,14 @@
     ];
     const loaded = JSON.parse(localStorage.getItem('loveItems'));
     let loveItems = (Array.isArray(loaded) && loaded.length>0) ? loaded : defaultItems.slice();
-
     function saveLove(){ localStorage.setItem('loveItems', JSON.stringify(loveItems)); updateProgress(); }
-
-    function updateProgress(){
-      const done = loveItems.filter(i=>i.done).length;
-      const total = Math.max(1, loveItems.length);
-      const pct = Math.round((done/total)*100);
-      document.getElementById('progressInner').style.width = pct + '%';
-      document.getElementById('progressInner').title = `已完成 ${done}/${total} 项`;
-    }
-
-    function renderList(){
-      loveListEl.innerHTML = '';
-      loveItems.forEach((it, idx)=>{
-        const li = document.createElement('li'); li.className='love-item';
-        const left = document.createElement('div'); left.className='item-left';
-        const cb = document.createElement('input'); cb.type='checkbox'; cb.checked = !!it.done;
-        cb.onchange = ()=>{
-          it.done = cb.checked;
-          it.date = it.done ? new Date().toLocaleDateString() : null;
-          saveLove(); renderList();
-        };
-        left.appendChild(cb);
-        const span = document.createElement('div'); span.className='text'; span.textContent = it.text;
-        if(it.done) span.style.textDecoration = 'line-through';
-        left.appendChild(span);
-        li.appendChild(left);
-
-        const right = document.createElement('div'); right.style.display='flex'; right.style.gap='8px'; right.style.alignItems='center';
-        if(it.date){
-          const d = document.createElement('div'); d.className='small'; d.textContent = it.date; right.appendChild(d);
-        }
-        const edit = document.createElement('button'); edit.className='btn ghost'; edit.textContent='编辑';
-        edit.onclick = ()=>{
-          const v = prompt('编辑清单项：', it.text);
-          if(v !== null){ it.text = v.trim() || it.text; saveLove(); renderList(); }
-        };
-        const del = document.createElement('button'); del.className='btn ghost'; del.textContent='删除';
-        del.onclick = ()=>{ if(confirm('确认删除这项吗？')){ loveItems.splice(idx,1); saveLove(); renderList(); } };
-        right.appendChild(edit); right.appendChild(del);
-        li.appendChild(right);
-        loveListEl.appendChild(li);
-      });
-      updateProgress();
-    }
-
-    function addItem(){
-      const input = document.getElementById('newItem');
-      const v = input.value.trim();
-      if(!v) return;
-      loveItems.push({text:v,done:false,date:null});
-      input.value=''; saveLove(); renderList();
-    }
-
+    function updateProgress(){ const done = loveItems.filter(i=>i.done).length; const total = Math.max(1, loveItems.length); const pct = Math.round((done/total)*100); document.getElementById('progressInner').style.width = pct + '%'; document.getElementById('progressInner').title = `已完成 ${done}/${total} 项`; }
+    function renderList(){ loveListEl.innerHTML=''; loveItems.forEach((it, idx)=>{ const li = document.createElement('li'); li.className='love-item'; const left = document.createElement('div'); left.className='item-left'; const cb = document.createElement('input'); cb.type='checkbox'; cb.checked = !!it.done; cb.onchange = ()=>{ it.done = cb.checked; it.date = it.done ? new Date().toLocaleDateString() : null; saveLove(); renderList(); }; left.appendChild(cb); const span = document.createElement('div'); span.className='text'; span.textContent = it.text; if(it.done) span.style.textDecoration = 'line-through'; left.appendChild(span); li.appendChild(left); const right = document.createElement('div'); right.style.display='flex'; right.style.gap='8px'; right.style.alignItems='center'; if(it.date){ const d = document.createElement('div'); d.className='small'; d.textContent = it.date; right.appendChild(d); } const edit = document.createElement('button'); edit.className='btn ghost'; edit.textContent='编辑'; edit.onclick = ()=>{ const v = prompt('编辑清单项：', it.text); if(v !== null){ it.text = v.trim() || it.text; saveLove(); renderList(); } }; const del = document.createElement('button'); del.className='btn ghost'; del.textContent='删除'; del.onclick = ()=>{ if(confirm('确认删除这项吗？')){ loveItems.splice(idx,1); saveLove(); renderList(); } }; right.appendChild(edit); right.appendChild(del); li.appendChild(right); loveListEl.appendChild(li); }); updateProgress(); }
+    function addItem(){ const input = document.getElementById('newItem'); const v = input.value.trim(); if(!v) return; loveItems.push({text:v,done:false,date:null}); input.value=''; saveLove(); renderList(); }
     renderList();
 
-    // 便利：Esc 关闭模态（保险）
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape'){
-        const pm = document.getElementById('photoManager');
-        const lb = document.getElementById('lightbox');
-        if(pm && !pm.classList.contains('hidden')) { pm.classList.add('hidden'); pm.style.display='none'; document.body.style.overflow=''; }
-        if(lb && !lb.classList.contains('hidden')) { lb.classList.add('hidden'); lb.style.display='none'; document.body.style.overflow=''; }
-      }
-    });
+    // 便捷：Esc 关闭模态
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape'){ const pmEl = document.getElementById('photoManager'); const lb = document.getElementById('lightbox'); if(pmEl && !pmEl.classList.contains('hidden')){ pmEl.classList.add('hidden'); pmEl.style.display='none'; document.body.style.overflow=''; } if(lb && !lb.classList.contains('hidden')){ lb.classList.add('hidden'); lb.style.display='none'; document.body.style.overflow=''; } } });
   </script>
 </body>
 </html>
