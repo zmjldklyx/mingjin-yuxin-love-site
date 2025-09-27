@@ -73,30 +73,6 @@
       100% { transform: translateY(-100px); opacity: 0; }
     }
 
-    #loveList {
-      list-style: none;
-      padding-left: 0;
-      margin-top: 10px;
-    }
-
-    #loveList li {
-      padding: 8px 0;
-      font-size: 16px;
-      color: #444;
-      position: relative;
-      padding-left: 24px;
-      transition: all 0.3s ease;
-    }
-
-    #loveList li::before {
-      content: "❤";
-      position: absolute;
-      left: 0;
-      color: #d6336c;
-      font-size: 16px;
-    }
-
-    /* 欢迎遮罩样式 */
     #welcomeOverlay {
       position: fixed;
       top: 0; left: 0;
@@ -123,10 +99,54 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
+    input[type="text"], input[type="file"] {
+      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: #d6336c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 8px 0;
+      font-size: 16px;
+      color: #444;
+      position: relative;
+      padding-left: 24px;
+    }
+
+    li::before {
+      content: "❤";
+      position: absolute;
+      left: 0;
+      color: #d6336c;
+      font-size: 16px;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <!-- 欢迎遮罩 -->
   <div id="welcomeOverlay">
     欢迎来到铭津 ♥ 玉薪的小窝
     <button onclick="enterSite()">进入小窝</button>
@@ -152,40 +172,33 @@
 
     <div class="card">
       <h2>照片回忆</h2>
-      <p>每一张照片，都是我们爱的见证。</p>
-      <a class="link" href="photo.html">查看照片</a>
+      <input type="file" accept="image/*" id="photoUpload" />
+      <div id="photoGallery"></div>
     </div>
 
     <div class="card">
       <h2>恋爱清单</h2>
-      <ul id="loveList">
-        <li>一起去看海 🌊</li>
-        <li>一起做饭 🍳</li>
-        <li>一起拍一张傻傻的合照 📸</li>
-        <li>一起写一封情书 💌</li>
-        <li>一起看一场日落 🌅</li>
-      </ul>
+      <input type="text" id="newItem" placeholder="输入新的恋爱目标..." />
+      <button onclick="addItem()">添加</button>
+      <ul id="loveList"></ul>
     </div>
   </div>
 
   <div class="floating-text">铭津 ♥ 玉薪</div>
 
   <script>
-    // 欢迎遮罩淡出
     function enterSite() {
       const overlay = document.getElementById("welcomeOverlay");
       overlay.style.opacity = "0";
       setTimeout(() => overlay.style.display = "none", 1000);
     }
 
-    // 纪念日计数（起始日期：2025年3月15日）
     const startDate = new Date("2025-03-15");
     const today = new Date();
     const diffTime = today - startDate;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     document.getElementById("daysTogether").textContent = diffDays;
 
-    // 每日情话
     const quotes = [
       "你是我心中最柔软的光。",
       "每一天醒来，最想见的人是你。",
@@ -195,6 +208,65 @@
     ];
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     document.getElementById("dailyQuote").textContent = `“${randomQuote}”`;
-  </script>
-</body>
-</html>
+
+    // 照片回忆功能
+    const gallery = document.getElementById("photoGallery");
+    const storedPhotos = JSON.parse(localStorage.getItem("photos")) || [];
+
+    function renderPhotos() {
+      gallery.innerHTML = "";
+      storedPhotos.forEach((src, index) => {
+        const img = document.createElement("img");
+        img.src = src;
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "删除这张照片";
+        delBtn.onclick = () => {
+          storedPhotos.splice(index, 1);
+          localStorage.setItem("photos", JSON.stringify(storedPhotos));
+          renderPhotos();
+        };
+
+        const wrapper = document.createElement("div");
+        wrapper.appendChild(img);
+        wrapper.appendChild(delBtn);
+        gallery.appendChild(wrapper);
+      });
+    }
+
+    document.getElementById("photoUpload").addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          storedPhotos.push(reader.result);
+          localStorage.setItem("photos", JSON.stringify(storedPhotos));
+          renderPhotos();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    renderPhotos();
+
+    // 恋爱清单功能
+    const loveList = document.getElementById("loveList");
+    const storedItems = JSON.parse(localStorage.getItem("loveItems")) || [];
+
+    function renderList() {
+      loveList.innerHTML = "";
+      storedItems.forEach((text, index) => {
+        const li = document.createElement("li");
+        li.textContent = text;
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "删除";
+        delBtn.style.marginLeft = "10px";
+        delBtn.onclick = () => {
+          storedItems.splice(index, 1);
+          localStorage.setItem("loveItems", JSON.stringify(storedItems));
+          renderList();
+        };
+
+        li.appendChild(delBtn);
+        loveList.appendChild(li
